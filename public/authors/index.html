@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SHRDBXLB5R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SHRDBXLB5R');
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnlyCloudFans - Authors</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
+      color: white;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      color: #00ffe5;
+      margin-bottom: 2rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .author-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 1rem;
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .author-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+    }
+    .author-top {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .author-photo, .radar-placeholder img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 0.75rem;
+    }
+    .author-info {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .author-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #00ffff;
+    }
+    .author-skills {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+    .subscribe-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 1rem;
+    }
+    .author-card:hover .subscribe-overlay {
+      opacity: 1;
+    }
+    .subscribe-button {
+      background: #00ffff;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+      margin-bottom: 0.5rem;
+    }
+    .subscribe-button:hover {
+      background: #00cccc;
+    }
+    .view-button {
+      background: transparent;
+      color: #00ffff;
+      border: 1px solid #00ffff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>👨‍💻 Meet the Authors</h1>
+  <div class="grid">
+    <div class="author-card">
+      <div class="author-top">
+        <img src="../assets/img/authors/mikusik.jpg" alt="Author Photo" class="author-photo">
+        <img src="../assets/img/radar-placeholder.jpg" alt="Radar Placeholder" class="radar-placeholder" style="width: 150px; height: 150px; object-fit: cover; border-radius: 0.75rem;">
+      </div>
+      <div class="author-info">
+        <div class="author-name">Michal Mikusik</div>
+        <div class="author-skills">Azure | GCP | Infrastructure</div>
+      </div>
+      <div class="subscribe-overlay">
+        <button class="subscribe-button">Subscribe</button>
+        <a href="#" class="view-button">View</a>
+      </div>
+    </div>
+    <div class="author-card">
+      <div class="author-top">
+        <img src="../assets/img/authors/hirner.jpg" alt="Author Photo" class="author-photo">
+        <img src="../assets/img/radar-placeholder.jpg" alt="Radar Placeholder" class="radar-placeholder" style="width: 150px; height: 150px; object-fit: cover; border-radius: 0.75rem;">
+      </div>
+      <div class="author-info">
+        <div class="author-name">Vladimir Hirner</div>
+        <div class="author-skills">MBA | CheckPoint | Security</div>
+      </div>
+      <div class="subscribe-overlay">
+        <button class="subscribe-button">Subscribe</button>
+        <a href="#" class="view-button">View</a>
+      </div>
+    </div>
+    <div class="author-card">
+      <div class="author-top">
+        <img src="../assets/img/authors/author3.jpg" alt="Author Photo" class="author-photo">
+        <img src="../assets/img/radar-placeholder.jpg" alt="Radar Placeholder" class="radar-placeholder" style="width: 150px; height: 150px; object-fit: cover; border-radius: 0.75rem;">
+      </div>
+      <div class="author-info">
+        <div class="author-name">Mark Liu</div>
+        <div class="author-skills">AWS | ML | Data Engineering</div>
+      </div>
+      <div class="subscribe-overlay">
+        <button class="subscribe-button">Subscribe</button>
+        <a href="#" class="view-button">View</a>
+      </div>
+    </div>
+    <!-- Add more authors as needed -->
+  </div>
+</body>
+</html>

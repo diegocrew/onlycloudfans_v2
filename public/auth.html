@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnlyCloudFans – Login</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h1 {
+      text-align: center;
+      color: #00ffe5;
+      margin-bottom: 1.5rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #1f1f2e;
+      color: #fff;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #00ffff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+      margin-bottom: 1rem;
+    }
+    button:hover {
+      background-color: #00cccc;
+    }
+    #status {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDAw2vYrNRSu5nrbmJUPX_2frO9Y0ARNPk",
+      authDomain: "onlycloudfans.firebaseapp.com",
+      projectId: "onlycloudfans",
+      storageBucket: "onlycloudfans.firebasestorage.app",
+      messagingSenderId: "1047876908790",
+      appId: "1:1047876908790:web:ff88b8f947a593a0551ed7",
+      measurementId: "G-1RW5MYZKDB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.signUp = async () => {
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        alert("Welcome " + userCredential.user.email);
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+
+    window.logIn = async () => {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        alert("Logged in as " + userCredential.user.email);
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      const status = document.getElementById("status");
+      if (user) {
+        status.textContent = "✅ Logged in as: " + user.email;
+      } else {
+        status.textContent = "❌ Not logged in";
+      }
+    });
+
+    window.logOut = () => {
+      signOut(auth);
+    };
+  </script>
+</head>
+<body>
+  <div class="card">
+    <h1>🔐 OnlyCloudFans</h1>
+
+    <input id="signup-email" type="email" placeholder="Signup Email" />
+    <input id="signup-password" type="password" placeholder="Signup Password" />
+    <button onclick="signUp()">Sign Up</button>
+
+    <input id="login-email" type="email" placeholder="Login Email" />
+    <input id="login-password" type="password" placeholder="Login Password" />
+    <button onclick="logIn()">Log In</button>
+
+    <button onclick="logOut()">Log Out</button>
+
+    <div id="status">Checking...</div>
+  </div>
+</body>
+</html>

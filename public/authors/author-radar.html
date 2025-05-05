@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Author Skill Radar</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: #10111a;
+      color: #fff;
+      font-family: sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+    .chart-container {
+      max-width: 600px;
+      margin: auto;
+    }
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .input-grid label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+    }
+    input[type=range] {
+      width: 60%;
+    }
+    canvas {
+      background: #1a1c2d;
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Author Skill Radar</h1>
+  <p>Set your skill levels (1–5) and visualize your cloud strengths.</p>
+
+  <div class="input-grid">
+    <label>Cloud Strategy & Roadmap <input type="range" min="1" max="5" value="3" id="strategy" /></label>
+    <label>Cloud Design <input type="range" min="1" max="5" value="3" id="design" /></label>
+    <label>Cloud Platform Selection <input type="range" min="1" max="5" value="3" id="platform" /></label>
+    <label>Cloud Migration <input type="range" min="1" max="5" value="3" id="migration" /></label>
+    <label>BCP and DR <input type="range" min="1" max="5" value="2" id="bcp" /></label>
+    <label>Cloud Cost Optimization <input type="range" min="1" max="5" value="3" id="cost" /></label>
+    <label>Cloud Governance <input type="range" min="1" max="5" value="2" id="governance" /></label>
+    <label>Cloud Integration <input type="range" min="1" max="5" value="3" id="integration" /></label>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="radarChart"></canvas>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    const data = {
+      labels: [
+        'Cloud Strategy and Roadmap',
+        'Cloud Design',
+        'Cloud Platform Selection',
+        'Cloud Migration',
+        'BCP and DR',
+        'Cloud Cost Optimization',
+        'Cloud Governance',
+        'Cloud Integration'
+      ],
+      datasets: [{
+        label: 'Skill Level',
+        data: [],
+        backgroundColor: 'rgba(255, 205, 86, 0.5)',
+        borderColor: 'rgba(255, 205, 86, 1)',
+        pointBackgroundColor: '#fff',
+        pointBorderColor: '#ffcd56',
+      }]
+    };
+
+    const radarChart = new Chart(ctx, {
+      type: 'radar',
+      data: data,
+      options: {
+        responsive: true,
+        scales: {
+          r: {
+            suggestedMin: 0,
+            suggestedMax: 5,
+            angleLines: { color: '#444' },
+            grid: { color: '#333' },
+            pointLabels: {
+              color: '#fff',
+              font: { size: 12 }
+            }
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    function updateChart() {
+      const values = [
+        +document.getElementById('strategy').value,
+        +document.getElementById('design').value,
+        +document.getElementById('platform').value,
+        +document.getElementById('migration').value,
+        +document.getElementById('bcp').value,
+        +document.getElementById('cost').value,
+        +document.getElementById('governance').value,
+        +document.getElementById('integration').value,
+      ];
+      radarChart.data.datasets[0].data = values;
+      radarChart.update();
+    }
+
+    document.querySelectorAll('input[type=range]').forEach(input => {
+      input.addEventListener('input', updateChart);
+    });
+
+    updateChart(); // Initial render
+  </script>
+</body>
+</html>
