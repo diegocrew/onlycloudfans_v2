@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "onlycloudfans"
-  }
+  },
+  "targets": {
+    "onlycloudfans": {
+      "hosting": {
+        "live": [
+          "onlycloudfans"
+        ],
+        "redirect": [
+          "onlycloudfans-default"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
