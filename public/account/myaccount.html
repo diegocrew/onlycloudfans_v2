@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OnlyCloudFans – My Account</title>
   <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 </head>
 <body>
   <div class="card">
@@ -69,16 +70,7 @@
     const emailDisplay = document.getElementById("email");
     let currentUser = null;
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "/auth.html";
-        return;
-      }
-      currentUser = user;
-      status.textContent = "✅ Logged in as " + user.email;
-      form.style.display = "block";
-      emailDisplay.textContent = user.email;
-
+    const loadUserData = async (user) => {
       const userRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(userRef);
       if (docSnap.exists()) {
@@ -91,15 +83,29 @@
           preview.style.display = "block";
         }
       }
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/auth.html";
+        return;
+      }
+      currentUser = user;
+      status.textContent = "✅ Logged in as " + user.email;
+      form.style.display = "block";
+      emailDisplay.textContent = user.email;
+
+      await loadUserData(user);
     });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const interests = interestsInput.value.split(",").map(tag => tag.trim()).filter(tag => tag);
+      if (!currentUser) return;
+
+      const interests = interestsInput.value.split(",").map(t => t.trim()).filter(Boolean);
       const userRef = doc(db, "users", currentUser.uid);
 
-      let photoURL = preview.src || "";
-
+      let photoURL = preview.src;
       if (photoInput.files.length > 0) {
         const file = photoInput.files[0];
         const photoRef = ref(storage, `avatars/${currentUser.uid}`);
@@ -110,12 +116,11 @@
       await setDoc(userRef, {
         displayName: displayNameInput.value,
         bio: bioInput.value,
+        interests,
         photoURL,
-        interests
+        email: currentUser.email
       }, { merge: true });
 
-      preview.src = photoURL;
-      preview.style.display = photoURL ? "block" : "none";
       status.textContent = "✅ Profile saved.";
     });
 
