@@ -4,11 +4,24 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "public",
+    "public": "public", 
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
+    ],
+    "redirects": [
+      {
+        "source": "onlycloudfans.web.app",
+        "destination": "https://onlycloudfans.com", 
+        "type": 301
+      },
+      {
+        "source": "onlycloudfans.firebaseapp.com",
+        "destination": "https://onlycloudfans.com", 
+        "type": 301
+        }
+      ]
+    }
   }
-}
+  
