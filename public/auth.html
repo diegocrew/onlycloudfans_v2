@@ -62,7 +62,7 @@
   </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDAw2vYrNRSu5nrbmJUPX_2frO9Y0ARNPk",
@@ -82,7 +82,7 @@
       const password = document.getElementById("signup-password").value;
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        alert("Welcome " + userCredential.user.email);
+        window.location.href = "/account/myaccount.html";
       } catch (error) {
         alert(error.message);
       }
@@ -93,7 +93,7 @@
       const password = document.getElementById("login-password").value;
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        alert("Logged in as " + userCredential.user.email);
+        window.location.href = "/account/myaccount.html";
       } catch (error) {
         alert(error.message);
       }
@@ -107,10 +107,6 @@
         status.textContent = "❌ Not logged in";
       }
     });
-
-    window.logOut = () => {
-      signOut(auth);
-    };
   </script>
 </head>
 <body>

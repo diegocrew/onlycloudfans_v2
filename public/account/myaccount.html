@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnlyCloudFans – My Account</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body class="auth-page">
+  <div class="card">
+    <h1>👤 Welcome to Your Account</h1>
+    <div id="status">Checking login...</div>
+    <div id="userProfile" style="display:none; margin-top: 1rem;">
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>Name:</strong> <span id="displayName"></span></p>
+      <p><strong>Bio:</strong> <span id="bio"></span></p>
+      <p><strong>Following:</strong> <span id="following"></span></p>
+      <button onclick="logOut()">Log Out</button>
+    </div>
+    <a href="/index.html" style="display:block; text-align:center; margin-top:1rem;">⬅ Back to Main Page</a>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDAw2vYrNRSu5nrbmJUPX_2frO9Y0ARNPk",
+      authDomain: "onlycloudfans.firebaseapp.com",
+      projectId: "onlycloudfans",
+      storageBucket: "onlycloudfans.firebasestorage.app",
+      messagingSenderId: "1047876908790",
+      appId: "1:1047876908790:web:ff88b8f947a593a0551ed7",
+      measurementId: "G-1RW5MYZKDB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    function logOut() {
+      signOut(auth).then(() => {
+        window.location.href = "/auth.html";
+      });
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/auth.html";
+        return;
+      }
+
+      const status = document.getElementById("status");
+      const profileDiv = document.getElementById("userProfile");
+
+      status.textContent = "✅ Logged in as: " + user.email;
+      const userRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(userRef);
+
+      if (!docSnap.exists()) {
+        await setDoc(userRef, {
+          email: user.email,
+          displayName: user.displayName || "",
+          bio: "",
+          photoURL: user.photoURL || "",
+          following: []
+        });
+      }
+
+      const data = (await getDoc(userRef)).data();
+      profileDiv.style.display = "block";
+      document.getElementById("email").textContent = data.email;
+      document.getElementById("displayName").textContent = data.displayName || "Not set";
+      document.getElementById("bio").textContent = data.bio || "Not set";
+      document.getElementById("following").textContent = (data.following || []).length + " author(s)";
+    });
+  </script>
+</body>
+</html>
