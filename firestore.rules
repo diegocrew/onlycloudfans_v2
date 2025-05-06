@@ -2,26 +2,36 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Public: Anyone can read authors and posts
+    // ✅ Authors: Public read, only approved users can create/update/delete their own profile
     match /authors/{authorId} {
       allow read: if true;
-      allow write: if request.auth != null && request.auth.uid == authorId;
+      allow create, update, delete: if request.auth != null
+        && request.auth.uid == authorId
+        && request.resource.data.isApproved == true; // Optional: you can remove this check if you don’t use "isApproved"
     }
 
+    // ✅ Posts: Public read, only the post owner can write
     match /posts/{postId} {
       allow read: if true;
-      allow create: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.keys().hasOnly(['title', 'content', 'tags', 'authorId', 'createdAt']);
       allow update, delete: if request.auth != null && request.auth.uid == resource.data.authorId;
     }
 
-    // Private: User profile
+    // ✅ Users: Only each user can read/write their own profile
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Subscriptions (only user can follow/unfollow)
+    // ✅ Subscriptions: Only the owner can read/write
     match /subscriptions/{subId} {
       allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+
+    // ❌ Default deny everything else
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
