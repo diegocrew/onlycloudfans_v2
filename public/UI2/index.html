@@ -16,7 +16,28 @@
       <a href="#subscribe">Subscribe</a>
     </div>
   </div>
-  <div id="root" class="card-grid"></div>
+
+  <div class="spotlight" id="spotlight"></div>
+
+  <div class="main-layout">
+    <div class="news-feed" id="root"></div>
+    <aside class="profile-panel">
+      <div class="profile-summary">
+        <h2>Your Profile</h2>
+        <p><strong>Username:</strong> guest</p>
+        <p><strong>Bio:</strong> Cloud-curious explorer.</p>
+      </div>
+      <div class="profile-section">
+        <h3>Liked Articles</h3>
+        <ul id="liked-articles"></ul>
+      </div>
+      <div class="profile-section">
+        <h3>Saved for Later</h3>
+        <ul id="saved-articles"></ul>
+      </div>
+    </aside>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
