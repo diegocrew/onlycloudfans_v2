@@ -1,5 +1,16 @@
 // app.js for OnlyCloudFans UI2
 
+// Simulated auth state
+// Firebase Auth Check
+let isLoggedIn = false;
+
+firebase.auth().onAuthStateChanged(user => {
+  isLoggedIn = !!user;
+  if (isLoggedIn) {
+    location.reload(); // force reload to rerun the authenticated view logic
+  }
+});
+
 // Spotlight
 const spotlightAuthors = [
   { name: "Alex Vega", quote: "10 ways FinOps changed our cloud cost culture" },
@@ -26,70 +37,59 @@ spotlight.addEventListener("mouseleave", () => spotlightInterval = setInterval(u
 updateSpotlight();
 
 // Articles
-const feedItems = [
-  { title: "Why GCP is killing it in AI", desc: "A breakdown of Google's AI-native strategy." },
-  { title: "Azure Arc in the real world", desc: "Hybrid done right — field notes from enterprise deployments." },
-  { title: "AWS IAM Pitfalls", desc: "What devs still get wrong about least privilege." },
-  { title: "Serverless vs Containers in 2025", desc: "Which one to choose for scaling microservices?" },
-  { title: "Azure Policy as Code", desc: "Governance automation with Bicep and Terraform." },
-  { title: "Comparing S3, Blob, and GCS", desc: "Object storage showdown: features, pricing, performance." },
-  { title: "Kubernetes Ingress in Multi-Cloud", desc: "Managing traffic across cloud providers securely." },
-  { title: "Top 10 DevOps Tools You Forgot", desc: "Overlooked but powerful tools that save time." },
-  { title: "Cloud Regions and Carbon Impact", desc: "How cloud geography affects sustainability." },
-  { title: "AI Ops in Production", desc: "How AI is being used to auto-resolve incidents." },
-  { title: "Monitoring GCP with OpenTelemetry", desc: "Traces, metrics, and logs in one open standard." },
-  { title: "Secrets Management in Kubernetes", desc: "Don't store tokens in YAML. Here's what to do instead." },
-  { title: "The Economics of Cloud Migration", desc: "Cost modeling tips for enterprises shifting to cloud." },
-  { title: "Disaster Recovery in Azure", desc: "Designing for high availability across regions." },
-  { title: "AWS Nitro Enclaves Explained", desc: "What they are, when to use them, and caveats." },
-  { title: "Zero Trust Beyond Marketing", desc: "Real-world patterns and policies you can use today." },
-  { title: "Cloudflare vs AWS Shield", desc: "A deep dive into DDoS protection services." },
-  { title: "Multicloud DNS Management", desc: "Using Traffic Director, Route 53, and Azure DNS together." },
-  { title: "CI/CD Anti-patterns", desc: "The mistakes that slow down your pipeline." },
-  { title: "The Rise of Cloud IDEs", desc: "Codespaces, Cloud9, and more — are they worth it?" },
-  { title: "Cloud Cost Anomalies You Missed", desc: "Small leaks that cause big bills and how to find them." }
-];
-
-const feed = document.getElementById("articles-feed");
-feedItems.forEach(item => {
-  const card = document.createElement("div");
-  card.className = "card";
-  card.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p>`;
-  feed.appendChild(card);
-});
+if (isLoggedIn) {
+  feedItems.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p>`;
+    feed.appendChild(card);
+  });
+} else {
+  const notice = document.createElement("div");
+  notice.className = "card";
+  notice.innerHTML = `<p><strong>Log in / Register</strong> to see personalized cloud articles.</p>`;
+  feed.appendChild(notice);
+}
 
 // Profile
-const liked = [
-  "Azure vs AWS Pricing",
-  "Cloud Regions Explained",
-  "AI for FinOps",
-  "Cloud Data Lake Patterns",
-  "Terraform Module Best Practices",
-  "Serverless in Real Life"
-];
-
-const saved = [
-  "Zero Trust in Practice",
-  "Backup Strategies for GCP",
-  "Multicloud DNS Failover",
-  "Building with Azure Arc",
-  "GitOps Crash Course",
-  "Secrets Rotation Pipeline"
-];
-
-liked.slice(0, 5).forEach(item => {
-  const li = document.createElement("li");
-  li.textContent = item;
-  document.getElementById("liked-articles").appendChild(li);
-});
-
-saved.slice(0, 5).forEach(item => {
-  const li = document.createElement("li");
-  li.textContent = item;
-  document.getElementById("saved-articles").appendChild(li);
-});
-
 const profilePanel = document.querySelector(".profile-panel");
+if (!isLoggedIn) {
+  profilePanel.innerHTML = `<div class="card"><p><strong>Log in / Register</strong> to access your profile and saved articles.</p></div>`;
+} else {
+  const liked = [
+    "Azure vs AWS Pricing",
+    "Cloud Regions Explained",
+    "AI for FinOps",
+    "Cloud Data Lake Patterns",
+    "Terraform Module Best Practices",
+    "Serverless in Real Life"
+  ];
+
+  const saved = [
+    "Zero Trust in Practice",
+    "Backup Strategies for GCP",
+    "Multicloud DNS Failover",
+    "Building with Azure Arc",
+    "GitOps Crash Course",
+    "Secrets Rotation Pipeline"
+  ];
+
+  liked.slice(0, 5).forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    document.getElementById("liked-articles").appendChild(li);
+  });
+
+  saved.slice(0, 5).forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    document.getElementById("saved-articles").appendChild(li);
+  });
+
+  // (duplicate removed due to isLoggedIn handling above)
+
+  // (duplicate removed due to isLoggedIn handling above)
+}
 
 const authors = ["Nina Kohler", "Alex Vega", "Tina Marsh", "Sergio Lin", "Maria Chen"];
 const authorSection = document.createElement("div");
