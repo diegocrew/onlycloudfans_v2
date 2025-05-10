@@ -1,25 +1,6 @@
-const spotlight = document.getElementById("spotlight");
-const likedList = document.getElementById("liked-articles");
-const savedList = document.getElementById("saved-articles");
-const navLinks = document.querySelector(".nav-links");
+// app.js for OnlyCloudFans UI2
 
-// Inject section links into nav bar
-const navSections = [
-  { key: "mission", label: "Our Mission" },
-  { key: "content", label: "Platform Content" },
-  { key: "community", label: "Community" },
-  { key: "trust", label: "Trusted & Secure" }
-];
-
-navSections.forEach(section => {
-  const a = document.createElement("a");
-  a.textContent = section.label;
-  a.href = "#";
-  a.dataset.scroll = section.key;
-  navLinks.appendChild(a);
-});
-
-// Spotlight Rotation
+// Spotlight
 const spotlightAuthors = [
   { name: "Alex Vega", quote: "10 ways FinOps changed our cloud cost culture" },
   { name: "Nina Kohler", quote: "Building secure landing zones at scale" },
@@ -28,52 +9,23 @@ const spotlightAuthors = [
 ];
 
 let currentSpotlight = 0;
-let spotlightInterval;
+const spotlight = document.getElementById("spotlight");
 
 function updateSpotlight() {
-  const person = spotlightAuthors[currentSpotlight];
+  const author = spotlightAuthors[currentSpotlight];
   spotlight.innerHTML = `
-    <h2>🌟 Spotlight: ${person.name}</h2>
-    <p>“${person.quote}”</p>
+    <h2>🌟 Spotlight: ${author.name}</h2>
+    <p>“${author.quote}”</p>
   `;
   currentSpotlight = (currentSpotlight + 1) % spotlightAuthors.length;
 }
 
-function startSpotlightRotation() {
-  spotlightInterval = setInterval(updateSpotlight, 10000);
-}
-
-function stopSpotlightRotation() {
-  clearInterval(spotlightInterval);
-}
-
-spotlight.addEventListener("mouseenter", stopSpotlightRotation);
-spotlight.addEventListener("mouseleave", startSpotlightRotation);
+let spotlightInterval = setInterval(updateSpotlight, 10000);
+spotlight.addEventListener("mouseenter", () => clearInterval(spotlightInterval));
+spotlight.addEventListener("mouseleave", () => spotlightInterval = setInterval(updateSpotlight, 10000));
 updateSpotlight();
-startSpotlightRotation();
 
-// Nav Scroll Logic
-const sectionMap = {
-  home: spotlight,
-  mission: () => document.getElementById("section-mission"),
-  content: () => document.getElementById("section-content"),
-  community: () => document.getElementById("section-community"),
-  trust: () => document.getElementById("section-trust")
-};
-
-Object.keys(sectionMap).forEach(key => {
-  const link = document.querySelector(`[data-scroll="${key}"]`);
-  if (link) {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const target = sectionMap[key];
-      const el = typeof target === "function" ? target() : target;
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    });
-  }
-});
-
-// News Feed Items
+// Articles
 const feedItems = [
   { title: "Why GCP is killing it in AI", desc: "A breakdown of Google's AI-native strategy." },
   { title: "Azure Arc in the real world", desc: "Hybrid done right — field notes from enterprise deployments." },
@@ -98,44 +50,62 @@ const feedItems = [
   { title: "Cloud Cost Anomalies You Missed", desc: "Small leaks that cause big bills and how to find them." }
 ];
 
-const feedColumn = document.getElementById("articles-feed");
+const feed = document.getElementById("articles-feed");
 feedItems.forEach(item => {
   const card = document.createElement("div");
   card.className = "card";
-
-  const title = document.createElement("h3");
-  title.textContent = item.title;
-  const desc = document.createElement("p");
-  desc.textContent = item.desc;
-
-  card.appendChild(title);
-  card.appendChild(desc);
-  feedColumn.appendChild(card);
+  card.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p>`;
+  feed.appendChild(card);
 });
 
-// Fill profile sections
-["Azure vs AWS Pricing", "Cloud Regions Explained"].forEach(title => {
+// Profile
+const liked = [
+  "Azure vs AWS Pricing",
+  "Cloud Regions Explained",
+  "AI for FinOps",
+  "Cloud Data Lake Patterns",
+  "Terraform Module Best Practices",
+  "Serverless in Real Life"
+];
+
+const saved = [
+  "Zero Trust in Practice",
+  "Backup Strategies for GCP",
+  "Multicloud DNS Failover",
+  "Building with Azure Arc",
+  "GitOps Crash Course",
+  "Secrets Rotation Pipeline"
+];
+
+liked.slice(0, 5).forEach(item => {
   const li = document.createElement("li");
-  li.textContent = title;
-  likedList.appendChild(li);
+  li.textContent = item;
+  document.getElementById("liked-articles").appendChild(li);
 });
 
-["Zero Trust in Practice", "Backup Strategies for GCP"].forEach(title => {
+saved.slice(0, 5).forEach(item => {
   const li = document.createElement("li");
-  li.textContent = title;
-  savedList.appendChild(li);
+  li.textContent = item;
+  document.getElementById("saved-articles").appendChild(li);
 });
 
-// Dark mode toggle
-const toggle = document.createElement("button");
-toggle.textContent = "☾";
-toggle.className = "toggle-darkmode";
-toggle.onclick = () => document.body.classList.toggle("dark");
-navLinks.appendChild(toggle);
+const profilePanel = document.querySelector(".profile-panel");
 
-// Cloud Stats Panel
-const statsColumn = document.getElementById("cloud-stats");
-statsColumn.innerHTML = `
+const authors = ["Nina Kohler", "Alex Vega", "Tina Marsh", "Sergio Lin", "Maria Chen"];
+const authorSection = document.createElement("div");
+authorSection.className = "profile-section";
+authorSection.innerHTML = `<h3>Top Authors You Follow</h3><ul>${authors.map(name => `<li>${name}</li>`).join("")}</ul>`;
+profilePanel.appendChild(authorSection);
+
+const recommendations = ["Hybrid Identity", "Edge Machine Learning", "GitHub Actions Security"];
+const recSection = document.createElement("div");
+recSection.className = "profile-section";
+recSection.innerHTML = `<h3>You Might Like</h3><ul>${recommendations.map(name => `<li>${name}</li>`).join("")}</ul>`;
+profilePanel.appendChild(recSection);
+
+// Stats
+const stats = document.getElementById("cloud-stats");
+stats.innerHTML = `
   <div class="card">
     <h3>🌩️ Cloud Stats</h3>
     <p><strong>Authors:</strong> 42</p>
@@ -161,3 +131,20 @@ statsColumn.innerHTML = `
     <p>Bookmarks: 412</p>
   </div>
 `;
+
+// Dark Mode Toggle
+const darkBtn = document.createElement("button");
+darkBtn.textContent = "☾";
+darkBtn.className = "toggle-darkmode";
+darkBtn.onclick = () => document.body.classList.toggle("dark");
+document.querySelector(".nav-links").appendChild(darkBtn);
+
+// Hamburger Toggle
+const navToggle = document.getElementById("nav-toggle");
+const navMenu = document.getElementById("nav-menu");
+
+if (navToggle && navMenu) {
+  navToggle.addEventListener("click", () => {
+    navMenu.classList.toggle("show");
+  });
+}
